@@ -10,7 +10,7 @@ client_id = config.client_id
 client_secret = config.client_secret
 client = ImgurClient(client_id, client_secret)
 dir_name = 'images/'
-new_imgs, cur_imgs, old_imgs, new_links = [], [], [], []
+new_imgs, cur_imgs, old_imgs, new_links, new_files = [], [], [], [], []
 bg_width_max = 2880
 bg_height_max = 1800
 
@@ -19,7 +19,7 @@ local images directory 3. list of old images'''
 def get_list():
     #Get list 1
     gallery = client.gallery('hot','time')
-    for item in gallery[0:30]:
+    for item in gallery:
         if isinstance(item, GalleryImage):
             new_imgs.append(item)
         if isinstance(item, GalleryAlbum):
@@ -27,19 +27,31 @@ def get_list():
             alb_imgs = client.get_album_images(item.id)
             for img in alb_imgs: new_imgs.append(img)
     prune_new()
+    for img in new_imgs: new_links.append(img.link)
+    for img in new_imgs: new_files.append(img.link[-11:])
     
     #Get list 2
-    dir_files = os.listdir('images')
+    i = 0
+    dir_files = os.listdir(dir_name)
     for item in dir_files:
+        i+=1
         if (len(item)  == 11) and (item[-4:] in ['.png', '.jpg', '.gif']):
             cur_imgs.append(item)
+    print str(i) + ' files in ' + dir_name + ' directory'
     
     #Get list 3
-    for img in new_imgs: new_links.append(img.link[-11:])
-    for i in cur_imgs:
-        if i in new_links:
-            new_links.remove(i)
-        else: old_imgs.append(file)
+    i = 0
+    a = []
+    for link in new_links:
+        if link[-11:] in cur_imgs:
+            a.append(link)
+            i+=1
+    for x in a: new_links.remove(x)
+    
+    for cur in cur_imgs:
+        if cur not in new_files:
+            old_imgs.append(cur)
+    print  str(i) + ' images are current.'
             
 '''Prune the list of images that are too big or animated'''
 def prune_new():
@@ -53,18 +65,22 @@ def prune_new():
 
 '''Remove the old image files'''
 def remove_old():
+    i = 0
     for f in old_imgs:
         assert (len(f) == 11) and (f[-4:] in ['.png', '.jpg', '.gif'])
-        os.remove(f)
+        os.remove(dir_name + f)
+        i += 1
+    print 'Removed ' + str(i) + ' old images.'
     
 '''Save the new images'''
-def save_images():
-    for image in new_imgs:
+def save_new_imgs():
+    i = 0
+    for image in new_links:
         urllib.urlretrieve(image, dir_name + image[-11:])
+        print image
+        i+=1
+    print 'Added ' + str(i) + ' new images.'
 
 get_list()
 remove_old()
-print new_links
-# print len(new_imgs)
-# print cur_imgs
-# print len(cur_imgs)
+save_new_imgs()
