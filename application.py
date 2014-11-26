@@ -1,13 +1,14 @@
 from imgurpython import ImgurClient
-import config
+#import config
 import urllib
 import os
 from imgurpython.imgur.models.gallery_album import GalleryAlbum
 from imgurpython.imgur.models.gallery_image import GalleryImage
-from itertools import count
 
-client_id = config.client_id
-client_secret = config.client_secret
+client_id = 'b1632240e79d339'
+client_secret = ''
+#client_id = config.client_id
+#client_secret = config.client_secret
 client = ImgurClient(client_id, client_secret)
 dir_name = 'images/'
 new_imgs, cur_imgs, old_imgs, new_links, new_files = [], [], [], [], []
@@ -37,7 +38,7 @@ def get_list():
         i+=1
         if (len(item)  == 11) and (item[-4:] in ['.png', '.jpg', '.gif']):
             cur_imgs.append(item)
-    print str(i) + ' files in ' + dir_name + ' directory'
+    print str(i) + ' files in ' + dir_name + ' directory.'
     
     #Get list 3
     i = 0
