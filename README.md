@@ -1,10 +1,10 @@
 dailybackground
 ===============
-This is an application that downloads the most viral images from imgur in the past 24 hours, filters them, and stores them in a folder so that you can run them as a background.
+This is an application that downloads the most viral images from imgur in the past 24 hours, filters them, and stores them in a folder so that you can run them as a background slideshow.
 
 This still needs a lot of work to make it easier for most people to use, see the issues section if you're willing to write some python or help build executables.
 
-For most people, here's how to run it:
+For most people, here's how to run it (I haven't checked that this actually works, please confirm or tell me what went wrong):
 
 OSX / Linux:
 1. Open up command line
